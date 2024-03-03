@@ -1,0 +1,21 @@
+.signin{
+    background-color: lightgrey;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+
+.signin-form{
+    display: grid;
+    grid-template-columns: 150px 150px;
+    padding : 15px;
+    gap: 5px;
+    border : 2px solid black;
+    margin: 5px;
+    width: 300px;
+}
+
+button{
+    cursor: pointer;
+}

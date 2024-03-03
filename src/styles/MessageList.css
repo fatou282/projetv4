@@ -1,0 +1,12 @@
+.message-list{
+    border : 1px black solid;
+    display: flex;
+    padding: 37px;
+    gap: 5px;
+    flex-direction: column;
+}
+
+.message-list > ul {
+    margin: 5px;
+    list-style-type:none;
+}
