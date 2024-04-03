@@ -4,11 +4,11 @@ import NavigationPanel from "./NavigationPanel";
 import SignIn from "./SignIn";
 import Forum from "./Forum";
 import ProfilePage from "./ProfilePage";
-
+import AdminPanel from "./AdminPanel"
 
 
 function MainPage(){
-    
+    const [isAdmin, setIsAdmin] = useState(false); // État pour isAdmin
     const [currentPage, setCurrentPage] = useState("signin_page"); //état permettant de spécifier la page courante
     const [isConnected, setConnected] = useState(false); //état permettant de dire si l'user est connecté
     const [currentUser, setCurrentUser] = useState(null);
@@ -23,6 +23,9 @@ function MainPage(){
         setCurrentPage("signin_page"); //la page courante celle de l'inscription
         setConnected(false);
 
+    }
+    function handleSetIsAdmin(value) {
+        setIsAdmin(value);
     }
 
    
@@ -42,6 +45,7 @@ function MainPage(){
                 (<div className="message-page">
                     
                     {/* le forum */}
+                    {isAdmin && <AdminPanel />}
                     <Forum login={login} logout={logout} isConnected={isConnected} currentUser={currentUser} currentPage={currentPage} setCurrentPage={setCurrentPage} />
                 
                 </div>) : 
