@@ -14,6 +14,7 @@ function MainPage(){
     const [currentUser, setCurrentUser] = useState(null);
 
     function login(user){
+        
         setCurrentPage("message_page"); //la page courante est le forum
         setConnected(true); //l'utilisateur est connecté
         setCurrentUser(user);
