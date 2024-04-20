@@ -1,7 +1,7 @@
 import MessageList from "./MessageList";
 import NavigationPanel from "./NavigationPanel";
-import '../styles/Forum.css';
-import SearchMessages from "./SearchMessages";
+import '../styles/Forum.css'
+
 function Forum({login, logout, isConnected, currentUser,currentPage, setCurrentPage}){
 
     function handleClickProfilePage(){
@@ -18,10 +18,6 @@ function Forum({login, logout, isConnected, currentUser,currentPage, setCurrentP
             
             <div className="message-page-msg">        
                 <MessageList currentUser={currentUser} />
-            </div>
-            <div className="searchmessage">
-                <SearchMessages/>
-
             </div>
         </>
     )
