@@ -6,12 +6,13 @@ class Messages {
   
     // Fonction pour afficher un message
     getMessage(messageId) {
-      return new Promise((resolve, reject) => {
-          this.db.collection("messages").findOne({ _id: messageId }, (err, message) => {
+
+      return new Promise((resolve, reject) => { //promesse : objet représentant l'achèvement/échec d'une opérat* async.
+          this.db.collection("messages").findOne({ _id: messageId }, (err, message) => { //ici, l'opérat* async. est une requête à la bdd pour rechercher un message spécifique par son ID ; la méthode findOne de la collect* msg est en charge de cela
               if (err) {
-                  reject(err);
+                  reject(err); // si une erreur se produit lors de la recherche dans la bd, la promesse est rejetée 
               } else {
-                  resolve(message);
+                  resolve(message); // si la recherche est réussie et qu'un msg correspondant est trouvé, la promesse est résolue : le message est retourné
               }
           });
       });
@@ -20,6 +21,7 @@ class Messages {
   
     // Fonction pour créer un nouveau message
     createMessage(messageData) {
+
       return new Promise((resolve, reject) => {
           this.db.collection("messages").insertOne(messageData, (err, result) => {
               if (err) {
