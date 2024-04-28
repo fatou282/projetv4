@@ -44,7 +44,7 @@ function SignIn({login}){
         event.preventDefault(); //empeche la page de se recharger après soumission du form
         const user = {name,lastName, username, email};
 
-        axios.post("/user",user)
+        axios.post("/api/user",user)
         .then(response => {
             console.log("Inscription réussie ! " + response.data); //response.data est l'équivalent de response.body
             login(user); //comme ça dès que le user s'inscrit, on le connecte dans le forum
