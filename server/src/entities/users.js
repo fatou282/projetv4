@@ -5,9 +5,9 @@ class Users {
   }
 
   // Retourne l'ID du nouvel utilisateur inséré
-  async create(login, password, lastname, firstname) {
+  async create(username, email, password, lastname, firstname) {
     try {
-        const newUser = { login, password, lastname, firstname };
+        const newUser = { username, email, password, lastname, firstname };
         const result = await this.db.collection('users').insertOne(newUser);
         return result.insertedId; 
     } catch (error) {

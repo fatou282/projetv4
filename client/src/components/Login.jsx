@@ -45,7 +45,7 @@ function Login({ onLogin }) {
             <h2>Connexion</h2>
             {error && <div className="error">{error}</div>}
             <form onSubmit={handleSubmit} className="login-form">
-                <label htmlFor='login'>Identifiant ou email:</label>
+                <label htmlFor='login'>Identifiant ou E-mail:</label>
                 <input
                     id='login'
                     onChange={handleChangeUsername}

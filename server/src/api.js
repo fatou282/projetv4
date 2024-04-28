@@ -60,7 +60,7 @@ function init(db) {
                         req.session.userId = userId; //L'ID de l'utilisateur est stocké dans la session nouvellement créée
                         return res.status(200).json({
                             status: 200,
-                            message: "Login et mot de passe accepté"
+                            message: "Login et mot de passe accepté" // renvoie une réponse au frontend, (un code de statut HTTP 200 pour indiquer que la connexion a réussi,+ autre information pertinente à renvoyer à l'utilisateur)
                         });
                     }
                 });
@@ -126,15 +126,15 @@ function init(db) {
         .delete((req, res, next) => res.send(`delete user ${req.params.user_id}`)); //permet de supprimer un utilisateur en fonction de son ID, si le user voulait supprimer son compte
 
 
-    router.put("/user", (req, res) => { // put ou post ?
-        const { login, password, lastname, firstname } = req.body;
+    router.post("/user", (req, res) => { // put ou post ?
+        const { username, email, password, lastname, firstname } = req.body;
 
-        if (!login || !password || !lastname || !firstname) {
+        if (!username || !email || !password || !lastname || !firstname) {
 
             res.status(400).send("Missing fields");
 
         } else {
-            users.create(login, password, lastname, firstname)
+            users.create(username, email, password, lastname, firstname)
                 .then((user_id) => res.status(201).send({ id: user_id }))
                 .catch((err) => res.status(500).send(err));
         }
