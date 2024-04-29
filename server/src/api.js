@@ -1,30 +1,42 @@
 const express = require("express");
-const Users = require("./entities/users.js");
+const Users = require("./entities/users.js"); // importe la classe Users depuis le fichier users.js
 const Messages = require("./entities/messages.js");
 const Requests = require("./entities/requests.js");
-const session = require("express-session");
+const session = require("express-session"); 
 
+// cette fonction initialise le routeur de l'API
 function init(db) {
-    const router = express.Router();
+    const router = express.Router(); //on crée le routeur Express
 
-    // Utilisation du JSON middleware
+    // Utilisation du JSON middleware pour avoir accès au corps des requêtes JSON
     router.use(express.json());
 
-    // Logger simple pour les requêtes vers ce routeur
+    //premier middleware à s'exécuter ; il s'applique à toutes les requetes envoyées au serveur Express. Il permet l'accès à l'API complet!
     router.use((req, res, next) => {
-        console.log('API: method %s, path %s', req.method, req.path);
-        console.log('Body', req.body);
+        res.setHeader('Access-Control-Allow-Origin', '*'); // d'accéder à notre API depuis n'importe quelle origine ( '*' ) 
+        res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'); // d'ajouter les headers mentionnés aux requêtes envoyées vers notre API (Origin , X-Requested-With , etc.)
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS'); // d'envoyer des requêtes avec les méthodes mentionnées ( GET ,POST , etc.).
         next();
     });
 
-    const users = new Users.default(db);
+    // Logger simple pour les requêtes vers ce routeur
+    router.use((req, res, next) => {
+        console.log('API: method %s, path %s', req.method, req.path); //permet de print la méthode (GET,POST..) et le chemin de l'URL demandé dans la requête
+        console.log('Body', req.body); // et ce que contient le corps de la requête
+        next();
+    });
 
-    // Route pour gérer l'authentification
-    router.post("/user/login", async (req, res) => {
+    //-------------------------------------------------------------------------------------------------------//
+
+    const users = new Users.default(db); //on crée une instance de la classe Users et on la connecte à la bd
+
+    // Route pour gérer l'authentification des utilisateurs
+    router.post("/api/user/login", async (req, res) => {
         try {
+            // on récupère les informations de connexion à partir du corps de la requête
             const { login, password } = req.body;
             
-            // Vérification de la validité de la requête HTTP
+            // Vérification de la validité des infos de connexion de la requête HTTP
             if (!login || !password) {
                 return res.status(400).json({
                     status: 400,
@@ -33,7 +45,7 @@ function init(db) {
             }
             
             // Vérification de l'existence de l'utilisateur
-            if (!await users.exists(login)) {
+            if (!await users.exists(login)) { //exists retourne true ou false
                 return res.status(401).json({
                     status: 401,
                     message: "Utilisateur inconnu"
@@ -44,7 +56,7 @@ function init(db) {
             let userId = await users.checkPassword(login, password);
             if (userId) {
                 // Authentification réussie : création d'une nouvelle session
-                req.session.regenerate(function (err) {
+                req.session.regenerate(function (err) { //regenerate() détruit toute session existante et en crée une nouvelle
                     if (err) {
                         return res.status(500).json({
                             status: 500,
@@ -52,10 +64,11 @@ function init(db) {
                         });
                     } else {
                         // Nouvelle session créée avec succès
-                        req.session.userId = userId;
+                        // La session permet de gérer l'authentification de l'utilisateur ; elle stocke les infos du user actuellement connecté sur le site
+                        req.session.userId = userId; //L'ID de l'utilisateur est stocké dans la session nouvellement créée
                         return res.status(200).json({
                             status: 200,
-                            message: "Login et mot de passe accepté"
+                            message: "Login et mot de passe accepté" // renvoie une réponse au frontend, (un code de statut HTTP 200 pour indiquer que la connexion a réussi,+ autre information pertinente à renvoyer à l'utilisateur)
                         });
                     }
                 });
@@ -64,7 +77,7 @@ function init(db) {
                 req.session.destroy((err) => {});
                 return res.status(403).json({
                     status: 403,
-                    message: "login et/ou le mot de passe invalide(s)"
+                    message: "Login et/ou le mot de passe invalide(s)"
                 });
             }
         } catch (e) {
@@ -76,9 +89,9 @@ function init(db) {
             });
         }
     });
-    router.delete("/user/logout", async (req, res) => {
+    router.delete("/api/user/logout", async (req, res) => {
         try {
-            // Vérifier si l'utilisateur est connecté
+            // On vérifie avant tout si l'utilisateur est connecté
             if (!req.session || !req.session.userId) {
                 return res.status(401).json({
                     status: 401,
@@ -86,8 +99,8 @@ function init(db) {
                 });
             }
 
-            // Appeler la méthode de déconnexion de la classe Users
-            await users.logout(req);
+            // L'utilisateur est connecté : on appelle la méthode de déconnexion de la classe Users
+            await users.logout(req); // il faut détruire la session avec la méthode destroy
 
             // Déconnexion réussie : retourner une réponse
             return res.status(200).json({
@@ -105,7 +118,7 @@ function init(db) {
     });
 
     // Autres routes pour la gestion des utilisateurs
-    router.route("/user/:user_id(\\d+)")
+    router.route("/api/user/:user_id(\\d+)") //route permettant de récupérer les informations d'un utilisateur (GET), par ex. lorsque le user veut voir son propre profil, le frontend va envoyer une requête à cette route avec son id
         .get(async (req, res) => {
             try {
                 const user = await users.get(req.params.user_id);
@@ -118,58 +131,67 @@ function init(db) {
                 res.status(500).send(e);
             }
         })
-        .delete((req, res, next) => res.send(`delete user ${req.params.user_id}`));
+        .delete((req, res, next) => res.send(`delete user ${req.params.user_id}`)); //permet de supprimer un utilisateur en fonction de son ID, si le user voulait supprimer son compte
 
-    router.put("/user", (req, res) => {
-        const { login, password, lastname, firstname } = req.body;
-        if (!login || !password || !lastname || !firstname) {
+
+    router.post("/api/user", (req, res) => { // put ou post ?
+        const { username, email, password, lastname, firstname } = req.body;
+
+        if (!username || !email || !password || !lastname || !firstname) {
+
             res.status(400).send("Missing fields");
+
         } else {
-            users.create(login, password, lastname, firstname)
+            users.create(username, email, password, lastname, firstname)
                 .then((user_id) => res.status(201).send({ id: user_id }))
                 .catch((err) => res.status(500).send(err));
         }
     });
 
-    
+    //-------------------------------------------------------------------------------------------------------//
+
     const messages = new Messages.default(db);
 
-    // Route pour afficher un message spécifique
-    router.get("/message/:message_id", async (req, res) => {
+    // Route pour afficher un message spécifique en fonction de son ID (par ex, si on veut chercher un message spécifique via la barre de recherches)
+    router.get("/api/message/:message_id", async (req, res) => {
         try {
             const message = await messages.getMessage(req.params.message_id);
+
             if (!message) {
                 return res.sendStatus(404);
             }
             return res.send(message);
+
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
     });
 
     // Route pour créer un nouveau message
-    router.post("/message", async (req, res) => {
+    router.post("/api/message", async (req, res) => { // quand le user rédige un new msg ; les données de ce msg sont envoyées via la requête pour l'enregistrer dans la bd
         try {
             const messageData = req.body;
             const newMessage = await messages.createMessage(messageData);
-            return res.status(201).json(newMessage);
+            return res.status(201).json(newMessage); // renvoie une réponse HTTP avec un statut de code 201 (Créé) et envoie un objet JSON en tant que corps de la réponse ; Une fois reçues, le client peut extraire les données de la réponse JSON et les afficher dans l'interface utilisateur de manière structurée
+
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
     });
 
     // Route pour supprimer un message
-    router.delete("/message/:message_id", async (req, res) => {
+    router.delete("/api/message/:message_id", async (req, res) => { //quand le user souhaite supprimer un de ses propres messages
         try {
             await messages.deleteMessage(req.params.message_id);
             return res.sendStatus(204);
+
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
     });
 
     // Route pour récupérer tous les messages
-    router.get("/messages", async (req, res) => {
+    router.get("/api/messages", async (req, res) => { //si le user veut afficher tous ses messages
         try {
             const allMessages = await messages.getAllMessages();
             return res.send(allMessages);
@@ -177,6 +199,8 @@ function init(db) {
             return res.status(500).json({ error: error.message });
         }
     });
+
+    //-------------------------------------------------------------------------------------------------------//
     const requests = new Requests.default(db); // Création d'une instance de la classe Requests
 
     // Route pour gérer l'authentification (non modifiée)
@@ -186,7 +210,7 @@ function init(db) {
     // Autres routes pour la gestion des utilisateurs (non modifiée)
 
     // Routes pour gérer les demandes
-    router.route("/request/:request_id")
+    router.route("/api/request/:request_id")
         .get(async (req, res) => {
             try {
                 const request = await requests.getRequest(req.params.request_id);
@@ -208,7 +232,7 @@ function init(db) {
             }
         });
 
-    router.post("/request/:request_id/accept", async (req, res) => {
+    router.post("/api/request/:request_id/accept", async (req, res) => {
         try {
             await requests.acceptRequest(req.params.request_id);
             res.sendStatus(200);
@@ -217,7 +241,7 @@ function init(db) {
         }
     });
 
-    router.get("/requests", async (req, res) => {
+    router.get("/api/requests", async (req, res) => {
         try {
             const allRequests = await requests.getAllRequests();
             res.send(allRequests);

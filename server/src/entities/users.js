@@ -4,47 +4,51 @@ class Users {
     // suite plus tard avec la BD
   }
 
-  async create(login, password, lastname, firstname) {
+  // Retourne l'ID du nouvel utilisateur inséré
+  async create(username, email, password, lastname, firstname) {
     try {
-        const newUser = { login, password, lastname, firstname };
+        const newUser = { username, email, password, lastname, firstname };
         const result = await this.db.collection('users').insertOne(newUser);
-        return result.insertedId; // Retourne l'ID du nouvel utilisateur inséré
+        return result.insertedId; 
     } catch (error) {
         throw new Error("Erreur lors de la création de l'utilisateur : " + error.message);
     }
 }
 
 
+// Retourne l'utilisateur trouvé ou null s'il n'existe pas
 async get(userId) {
   try {
       const user = await this.db.collection('users').findOne({ _id: userId });
-      return user; // Retourne l'utilisateur trouvé ou null s'il n'existe pas
+      return user; 
   } catch (error) {
       throw new Error("Erreur lors de la récupération de l'utilisateur : " + error.message);
   }
 }
 
 
+// Retourne true si l'utilisateur existe, sinon false
 async exists(login) {
   try {
       const user = await this.db.collection('users').findOne({ login });
-      return user !== null; // Retourne true si l'utilisateur existe, sinon false
+      return user !== null; 
   } catch (error) {
       throw new Error("Erreur lors de la vérification de l'existence de l'utilisateur : " + error.message);
   }
 }
 
 
-async checkpassword(login, password) {
+// Retourne l'ID de l'utilisateur si les identifiants sont valides, sinon null
+async checkPassword(login, password) {
   try {
       const user = await this.db.collection('users').findOne({ login, password });
-      return user ? user._id : null; // Retourne l'ID de l'utilisateur si les identifiants sont valides, sinon null
+      return user ? user._id : null; 
   } catch (error) {
       throw new Error("Erreur lors de la vérification du mot de passe de l'utilisateur : " + error.message);
   }
 }
 
-
+// Supprime un utilisateur
 async deleteUser(userId) {
   try {
       const result = await this.db.collection('users').deleteOne({ _id: userId });
