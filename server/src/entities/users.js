@@ -4,83 +4,69 @@ class Users {
     // suite plus tard avec la BD
   }
 
-  create(login, password, lastname, firstname) {
-    return new Promise((resolve, reject) => {
-      let userid = 1; // À remplacer par une requête bd
-      if(false) {
-        //erreur
-        reject();
-      } else {
-        resolve(userid);
-      }
-    });
-  }
-
-  get(userid) {
-    return new Promise((resolve, reject) => {
-      const user = {
-         login: "pikachu",
-         password: "1234",
-         lastname: "chu",
-         firstname: "pika"
-      }; // À remplacer par une requête bd
-
-      if(false) {
-        //erreur
-        reject();
-      } else {
-        if(userid == 1) {
-          resolve(user);
-        } else {
-          resolve(null);
-        }
-      }
-    });
-  }
-
-  async exists(login) {
-    return new Promise((resolve, reject) => {
-      if(false) {
-        //erreur
-        reject();
-      } else {
-        resolve(true);
-      }
-    });
-  }
-
-  checkpassword(login, password) {
-    return new Promise((resolve, reject) => {
-      let userid = 1; // À remplacer par une requête bd
-      if(false) {
-        //erreur
-        reject();
-      } else {
-        resolve(userid);
-      }
-    });
-  }
-
-  async deleteUser(userId) {
+  async create(login, password, lastname, firstname) {
     try {
-      // récupérer l'utilisateur depuis la base de données en utilisant l'identifiant fourni
-      // Exemple : await this.db.remove({ userId })
-      // Code de suppression dans la base de données
+        const newUser = { login, password, lastname, firstname };
+        const result = await this.db.collection('users').insertOne(newUser);
+        return result.insertedId; // Retourne l'ID du nouvel utilisateur inséré
     } catch (error) {
-      throw new Error("Erreur lors de la suppression de l'utilisateur : " + error.message);
+        throw new Error("Erreur lors de la création de l'utilisateur : " + error.message);
     }
+}
+
+
+async get(userId) {
+  try {
+      const user = await this.db.collection('users').findOne({ _id: userId });
+      return user; // Retourne l'utilisateur trouvé ou null s'il n'existe pas
+  } catch (error) {
+      throw new Error("Erreur lors de la récupération de l'utilisateur : " + error.message);
   }
+}
+
+
+async exists(login) {
+  try {
+      const user = await this.db.collection('users').findOne({ login });
+      return user !== null; // Retourne true si l'utilisateur existe, sinon false
+  } catch (error) {
+      throw new Error("Erreur lors de la vérification de l'existence de l'utilisateur : " + error.message);
+  }
+}
+
+
+async checkpassword(login, password) {
+  try {
+      const user = await this.db.collection('users').findOne({ login, password });
+      return user ? user._id : null; // Retourne l'ID de l'utilisateur si les identifiants sont valides, sinon null
+  } catch (error) {
+      throw new Error("Erreur lors de la vérification du mot de passe de l'utilisateur : " + error.message);
+  }
+}
+
+
+async deleteUser(userId) {
+  try {
+      const result = await this.db.collection('users').deleteOne({ _id: userId });
+      if (result.deletedCount === 0) {
+          throw new Error("Utilisateur non trouvé");
+      }
+  } catch (error) {
+      throw new Error("Erreur lors de la suppression de l'utilisateur : " + error.message);
+  }
+}
+
 
   // Méthode pour récupérer la liste de tous les utilisateurs
   async getAllUsers() {
     try {
-     //récupérer tous les utilisateurs depuis la base de données
-      // Exemple : const users = await this.db.find()
-      // Code pour récupérer tous les utilisateurs depuis la base de données
+        const users = await this.db.collection('users').find().toArray();
+        return users; // Retourne la liste de tous les utilisateurs
     } catch (error) {
-      throw new Error("Erreur lors de la récupération de la liste des utilisateurs : " + error.message);
+        throw new Error("Erreur lors de la récupération de la liste des utilisateurs : " + error.message);
     }
-  }
+}
+
 }
 
 
