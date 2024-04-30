@@ -74,5 +74,5 @@ async deleteUser(userId) {
 }
 
 
-exports.default = Users;
+module.exports = Users;
 

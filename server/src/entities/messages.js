@@ -50,5 +50,5 @@ class Messages {
     // Autres méthodes à ajouter selon les besoins
   }
   
-  exports.default = Messages;
+  module.exports = Messages;
   

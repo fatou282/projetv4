@@ -28,7 +28,7 @@ function init(db) {
 
     //-------------------------------------------------------------------------------------------------------//
 
-    const users = new Users.default(db); //on crée une instance de la classe Users et on la connecte à la bd
+    const users = new Users(db); //on crée une instance de la classe Users et on la connecte à la bd
 
     // Route pour gérer l'authentification des utilisateurs
     router.post("/api/user/login", async (req, res) => {
@@ -150,7 +150,7 @@ function init(db) {
 
     //-------------------------------------------------------------------------------------------------------//
 
-    const messages = new Messages.default(db);
+    const messages = new Messages(db);
 
     // Route pour afficher un message spécifique en fonction de son ID (par ex, si on veut chercher un message spécifique via la barre de recherches)
     router.get("/api/message/:message_id", async (req, res) => {
@@ -201,7 +201,8 @@ function init(db) {
     });
 
     //-------------------------------------------------------------------------------------------------------//
-    const requests = new Requests.default(db); // Création d'une instance de la classe Requests
+   
+    const requests = new Requests(db); // Création d'une instance de la classe Requests, sans ajouter default
 
     // Route pour gérer l'authentification (non modifiée)
 

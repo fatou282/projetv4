@@ -1,7 +1,7 @@
 {
   "name": "organizasso",
   "version": "1.0.0",
-  "description": "Mon app touitère côté serveur",
+  "description": "Mon app organizasso côté serveur",
   "main": "index.js",
   "scripts": {
     "serve": "node src/index.js",
