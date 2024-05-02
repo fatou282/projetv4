@@ -5,10 +5,11 @@ class Users {
   }
 
   // Retourne l'ID du nouvel utilisateur inséré
-  async create(username, email, password, lastname, firstname) {
+  async create(name, lastName, username, email, password) {
     try {
-        const newUser = { username, email, password, lastname, firstname };
+        const newUser = { name, lastName, username, email, password };
         const result = await this.db.collection('users').insertOne(newUser);
+        console.log("dans la bdd")
         return result.insertedId; 
     } catch (error) {
         throw new Error("Erreur lors de la création de l'utilisateur : " + error.message);
@@ -39,14 +40,7 @@ async exists(login) {
 
 
 // Retourne l'ID de l'utilisateur si les identifiants sont valides, sinon null
-async checkPassword(login, password) {
-  try {
-      const user = await this.db.collection('users').findOne({ login, password });
-      return user ? user._id : null; 
-  } catch (error) {
-      throw new Error("Erreur lors de la vérification du mot de passe de l'utilisateur : " + error.message);
-  }
-}
+
 
 // Supprime un utilisateur
 async deleteUser(userId) {
