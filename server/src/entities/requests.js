@@ -50,4 +50,4 @@ class Requests {
   // Autres méthodes à ajouter selon les besoins
 }
 
-module.exports = Requests;
+exports.default = Requests;

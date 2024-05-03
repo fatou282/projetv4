@@ -5,6 +5,7 @@ import SignIn from "./SignIn";
 import Forum from "./Forum";
 import ProfilePage from "./ProfilePage";
 import AdminPanel from "./AdminPanel"
+import { Link } from 'react-router-dom'; // Ajoutez cette ligne d'import
 
 
 function MainPage(){
@@ -35,13 +36,13 @@ function MainPage(){
             
             {/* si la page courante est "signin_page" on affiche login, sinon : signin */}
             {currentPage === "signin_page" ? (
-
-                <div className="signin-page">
-                    <SignIn login={login} />
-                    <NavigationPanel login={login} logout={logout} isConnected={isConnected} currentUser={currentUser} currentPage={currentPage} />
-                    
-                </div> 
-            ) : (
+       <div className="main-page">
+       {/* Afficher les liens vers la page de connexion et la page d'inscription */}
+       <SignIn /> {/* Afficher le composant SignIn par défaut */}
+                {/* Afficher le lien vers la page de connexion */}
+                <Link to="/login">Déjà un compte ? Connectez-vous ici</Link>
+   </div>
+      ) : (
                 currentPage === "message_page" ?
                 (<div className="message-page">
                     

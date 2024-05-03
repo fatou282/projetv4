@@ -1,31 +1,28 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import axios from 'axios'; // Importer Axios
 import '../styles/Login.css';
 
-function Login({ onLogin }) {
+
+function Login({history}) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
+    axios.defaults.baseURL = 'http://localhost:4000';
 
     async function handleSubmit(event) {
         event.preventDefault();
-        
-        try {
-            // Envoi des données de connexion au serveur
-            const response = await fetch('/api/user/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ login: username, password: password })
-            });
+        const user = { username, password };
 
-            if (!response.ok) {
-                // Si la réponse du serveur n'est pas OK, gérer l'erreur
+        try {
+            // Envoi des données de connexion au serveur avec Axios
+            const response = await axios.post('/api/user/login', user);
+            // Vérifier si la réponse est OK (status 200)
+            if (response.status !== 200) {
                 throw new Error('Identifiant ou mot de passe incorrect');
             }
 
-            // Si la réponse est OK, mettre à jour l'état pour indiquer que l'utilisateur est connecté
-            onLogin();
+            // Redirection vers la page du forum après connexion réussie
+            history.push('/forum');
         } catch (error) {
             // En cas d'erreur, afficher le message d'erreur à l'utilisateur
             setError(error.message);
@@ -45,7 +42,7 @@ function Login({ onLogin }) {
             <h2>Connexion</h2>
             {error && <div className="error">{error}</div>}
             <form onSubmit={handleSubmit} className="login-form">
-                <label htmlFor='login'>Identifiant ou E-mail:</label>
+                <label htmlFor='login'>Identifiant :</label>
                 <input
                     id='login'
                     onChange={handleChangeUsername}
