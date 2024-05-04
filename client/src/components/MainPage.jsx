@@ -38,7 +38,7 @@ function MainPage(){
             {currentPage === "signin_page" ? (
        <div className="main-page">
        {/* Afficher les liens vers la page de connexion et la page d'inscription */}
-       <SignIn /> {/* Afficher le composant SignIn par défaut */}
+       <SignIn login={login}/> {/* Afficher le composant SignIn par défaut */}
                 {/* Afficher le lien vers la page de connexion */}
                 <Link to="/login">Déjà un compte ? Connectez-vous ici</Link>
    </div>

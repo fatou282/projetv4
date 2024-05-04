@@ -8,6 +8,14 @@ class Users {
   async create(name, lastName, username, email, password) {
     try {
         const newUser = { name, lastName, username, email, password };
+
+         //Avant de créer un utilisateur dans la bd, on veut vérifier s'il n'y est pas déjà pr éviter les doublons
+         if(this.exists(username)){ //this -> pr use exists de la classe Users, et qu'on est actuellement dans une instance d'user
+          console.log("Un utilisateur avec cet identifiant existe déjà");
+      }
+      else if(this.exists(email)){
+          console.log("Un utilisateur avec cet email existe déjà");
+      }
         const result = await this.db.collection('users').insertOne(newUser);
         console.log("dans la bdd")
         return result.insertedId; 

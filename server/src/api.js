@@ -10,6 +10,7 @@ function init(db) {
 
     router.use(express.json());
 
+
     router.use((req, res, next) => {
         console.log('API: method %s, path %s', req.method, req.path); //pour print la méthode (POST, GET..) et le chemin de l'URL demandé dans la requete
         console.log('Body', req.body); // et ce que contient la req
@@ -33,7 +34,8 @@ function init(db) {
                 });
             }
     
-           
+
+            //l'utilisateur n'a jamais été inscrit
             const newUser = await users.create(name, lastName, username, email, password);
     
             // Réponse de succès
@@ -42,6 +44,8 @@ function init(db) {
                 message: "Inscription réussie !",
                 user: newUser // Renvoi des données de l'utilisateur nouvellement créé si nécessaire
             });
+            
+            
         } catch (error) {
             // Gestion des erreurs
             return res.status(500).json({
@@ -52,7 +56,7 @@ function init(db) {
         }
     });
     router.post("/user/login", async (req, res) => {
-        console.log("fonction bien appelée")
+        console.log("fonction Login bien appelée")
         try {
             const { username, password } = req.body;
             if (!username || !password) {
@@ -65,6 +69,7 @@ function init(db) {
             // Vérifier si l'utilisateur existe déjà
             const userExists = await users.exists(username);
             if (!userExists) {
+                console.log("Le user n'existe pas dans la bdd");
                 return res.status(404).json({
                     status: 404,
                     message: "Nom d'utilisateur invalide"

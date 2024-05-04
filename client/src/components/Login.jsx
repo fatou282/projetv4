@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Importer Axios
 import '../styles/Login.css';
+import {Link} from 'react-router-dom'
 
 
 function Login({history}) {
@@ -17,6 +18,7 @@ function Login({history}) {
         try {
             // Envoi des données de connexion au serveur avec Axios
             const response = await axios.post('/api/user/login', user);
+            
             // Vérifier si la réponse est OK (status 200)
             if (response.status !== 200) {
                 throw new Error('Identifiant ou mot de passe incorrect');
@@ -24,7 +26,8 @@ function Login({history}) {
 
             // Redirection vers la page du forum après connexion réussie
             history.push('/forum');
-        } catch (error) {
+        } 
+        catch (error) {
             // En cas d'erreur, afficher le message d'erreur à l'utilisateur
             setError(error.message);
         }
@@ -43,7 +46,7 @@ function Login({history}) {
             <h2>Connexion</h2>
             {error && <div className="error">{error}</div>}
             <form onSubmit={handleSubmit} className="login-form">
-                <label htmlFor='login'>Identifiant :</label>
+                <label htmlFor='login'>Identifiant ou adresse e-mail : </label>
                 <input
                     id='login'
                     onChange={handleChangeUsername}
@@ -53,7 +56,7 @@ function Login({history}) {
 
                 <br />
 
-                <label htmlFor='pass'>Mot de passe:</label>
+                <label htmlFor='pass'>Mot de passe :</label>
                 <br />
                 <input
                     id="pass"
@@ -64,6 +67,7 @@ function Login({history}) {
                 <br />
                 <button type="submit">Se connecter</button>
             </form>
+            <Link to='/signin'>Nouveau chez OrganizAsso ? Créer votre compte</Link>
         </div>
     );
 }

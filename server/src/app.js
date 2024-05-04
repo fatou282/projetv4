@@ -44,19 +44,19 @@ const server = app.listen(4000, async () => {
         //Cette connexion permet au serveur d'interagir avec la bd pour récupèrer et stocker des données
 
         // Faites ce que vous avez à faire avec la base de données...
-        //await faitDesChoses(client);
-        const db = client.db('Organizasso'); //c'est notre base de données
-        const collectionUsers = db.collection('users'); //ça récupère une instance de la collection users
+        await faitDesChoses(client);
+        // const db = client.db('Organizasso'); //c'est notre base de données
+        // const collectionUsers = db.collection('users'); //ça récupère une instance de la collection users
 
-        const newObjectUsers = {name : "Hana", age : 21};
-        collectionUsers.insertOne(newObjectUsers, (err, result) => {
-            if(err){
-                console.error("Erreur insertion :",err);
-            }
-            else{
-                console.log("Insertion avec succès! : ",result.insertedId);
-            }
-        });
+        // const newObjectUsers = {name : "Hana", age : 21};
+        // collectionUsers.insertOne(newObjectUsers, (err, result) => {
+        //     if(err){
+        //         console.error("Erreur insertion :",err);
+        //     }
+        //     else{
+        //         console.log("Insertion avec succès! : ",result.insertedId);
+        //     }
+        // });
     } 
     catch (erreur) {
         console.error("Erreur lors de la connexion à la base de données MongoDB :", erreur);

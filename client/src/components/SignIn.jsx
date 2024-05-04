@@ -45,9 +45,12 @@ function SignIn({ login }) {
 
         try {
             const user = { name, lastName, username, email, password };
+
             console.log("User Data:", user);
+
             const response = await axios.post("/api/user/register", user);
             console.log("Inscription réussie ! ", response.data);
+            
             login(user);
         } catch (error) {
             console.log("Erreur lors de l'inscription", error);
