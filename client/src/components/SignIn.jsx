@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import '../styles/SignIn.css';
 import axios from 'axios';
+import { Link } from "react-router-dom";
 
-function SignIn({ login }) {
+
+function SignIn({ history }) {
     const [name, setName] = useState("");
     const [lastName, setLastName] = useState("");
     const [username, setUsername] = useState("");
@@ -50,9 +52,10 @@ function SignIn({ login }) {
 
             const response = await axios.post("/api/user/register", user);
             console.log("Inscription réussie ! ", response.data);
-            
-            login(user);
-        } catch (error) {
+            history.push({
+                pathname: '/forum',
+                state: { currentUser: user }
+            });        } catch (error) {
             console.log("Erreur lors de l'inscription", error);
         }
     }
@@ -79,6 +82,8 @@ function SignIn({ login }) {
 
                 <button type="submit">S'inscrire</button>
                 <button type="reset">Annuler</button>
+                <Link to="/login" >Vous n'avez pas de compte ? Inscrivez-vous ici</Link>
+
             </form>
         </div>
     );

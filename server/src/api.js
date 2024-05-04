@@ -64,8 +64,8 @@ function init(db) {
 
         console.log("fonction Login bien appelée")
         try {
-            const { identifier, password } = req.body;
-            if (!identifier || !password) {
+            const { username, password } = req.body;
+            if (!username || !password) {
                 return res.status(400).json({
                     status: 400,
                     message: "Requête invalide : nom d'utilisateur et mot de passe nécessaires"
@@ -73,7 +73,7 @@ function init(db) {
             }
     
             // Vérifier si l'utilisateur existe déjà
-            const userExists = await users.exists(identifier);
+            const userExists = await users.exists(username);
             if (!userExists) {
                 console.log("L'utilisateur n'existe pas dans la bdd");
                 return res.status(404).json({
@@ -81,11 +81,13 @@ function init(db) {
                     message: "Nom d'utilisateur invalide"
                 });
             }
-    
+            const userData = await users.getUserDataByUsername(username);
+
             // Envoyer une réponse 200 OK si l'utilisateur existe
             return res.status(200).json({
                 status: 200,
-                message: "Utilisateur trouvé"
+                message: "Utilisateur trouvé",
+                user: userData
             });
 
         } catch (error) {
@@ -143,12 +145,14 @@ function init(db) {
     });
 
     router.post("/message", async (req, res) => {
-        try {
-            const messageData = req.body;
-            const newMessage = await messages.createMessage(messageData);
-            return res.status(201).json(newMessage);
-        } catch (error) {
-            return res.status(500).json({ error: error.message });
+        
+        const {author, content, date} = req.body ; 
+        if (!author|| !content|| !date) {
+            res.status(400).send("Missing fields");
+        } else {
+            messages.create(author, content, date)
+                .then((message_id) => res.status(201).send({ id: message_id }))
+                .catch((err) => res.status(500).send(err));
         }
     });
 
@@ -162,8 +166,11 @@ function init(db) {
     });
 
     router.get("/messages", async (req, res) => {
+        console.log("route bien trouvée");
+
         try {
             const allMessages = await messages.getAllMessages();
+            console.log(allMessages);
             return res.send(allMessages);
         } catch (error) {
             return res.status(500).json({ error: error.message });

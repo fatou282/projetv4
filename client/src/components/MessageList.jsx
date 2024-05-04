@@ -1,33 +1,47 @@
-import '../styles/MessageList.css'
-import { messageList } from '../datas/messageList'
-import Message from './Message'
-import { useState } from 'react'
-import MessageForm from './MessageForm';
+import '../styles/MessageList.css';
+import { useState, useEffect } from 'react';
+import Message from './Message';
+import axios from 'axios';
+import MessageForm from './MessageForm'; 
 
-function MessageList({currentUser}){
-    const [messages, setMessages] = useState(messageList);
+function MessageList({ currentUser }) {
+    const [messages, setMessages] = useState([]);
+    axios.defaults.baseURL = 'http://localhost:4000';
 
-    function handleMessageSubmit(newMessage){
+    useEffect(() => {
+        // Charger les messages depuis l'API lorsque le composant est monté
+        axios.get('/api/messages')
+            .then(response => {
+                setMessages(response.data);
+            })
+            .catch(error => {
+                console.error('Erreur lors du chargement des messages :', error);
+            });
+    }, []);
+
+    // Fonction pour ajouter un nouveau message à la liste
+    function handleMessageSubmit(newMessage) {
         setMessages([...messages, newMessage]);
     }
-    return(
+
+    return (
         <div className='message-list'>
             <h1>Liste des messages</h1>
-            <MessageForm onMessageSubmit={handleMessageSubmit} currentUser={currentUser}/>
+            {/* Afficher le formulaire pour ajouter un nouveau message */}
+            <MessageForm onMessageSubmit={handleMessageSubmit} currentUser={currentUser} />
             <ul>
-                {messages.map((msg) => (
+                {/* Afficher la liste des messages */}
+                {messages.map(message => (
                     <Message
-                        
-                        key={msg.id} 
-                        author={msg.author}
-                        content={msg.content}
-                        date={msg.date}
+                        key={message.id}
+                        author={message.author}
+                        content={message.content}
+                        date={message.date}
                     />
                 ))}
             </ul>
         </div>
-    )
+    );
 }
-
 
 export default MessageList;

@@ -1,10 +1,13 @@
+import React from 'react';
 import MessageList from "./MessageList";
 import Logout from "./Logout";
 import '../styles/Forum.css';
 import SearchMessages from "./SearchMessages";
 import { Link } from 'react-router-dom';
 
-function Forum({ login, logout, isConnected, currentUser, currentPage, setCurrentPage }) {
+function Forum(props, {logout, setCurrentPage}) {
+    const { currentUser } = props.location.state;
+
     function handleClickProfilePage() {
         setCurrentPage("profile_page");
     }
@@ -27,7 +30,7 @@ function Forum({ login, logout, isConnected, currentUser, currentPage, setCurren
             </div>
             
         </>
-    )
+    );
 }
 
 export default Forum;
