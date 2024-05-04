@@ -6,18 +6,18 @@ import {Link} from 'react-router-dom'
 
 function Login({history}) {
     
-    const [username, setUsername] = useState("");
+    const [identifier, setIdentifier] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
     axios.defaults.baseURL = 'http://localhost:4000';
 
     async function handleSubmit(event) {
         event.preventDefault();
-        const user = { username, password };
+        const user = { identifier, password };
 
         try {
             // Envoi des données de connexion au serveur avec Axios
-            const response = await axios.post('/api/user/login', user);
+            const response = await axios.post('/api/users/login', user);
             
             // Vérifier si la réponse est OK (status 200)
             if (response.status !== 200) {
@@ -33,8 +33,8 @@ function Login({history}) {
         }
     }
 
-    function handleChangeUsername(event) {
-        setUsername(event.target.value);
+    function handleChangeIdentifier(event) {
+        setIdentifier(event.target.value);
     }
 
     function handleChangePassword(event) {
@@ -45,21 +45,24 @@ function Login({history}) {
         <div>
             <h2>Connexion</h2>
             {error && <div className="error">{error}</div>}
-            <form onSubmit={handleSubmit} className="login-form">
-                <label htmlFor='login'>Identifiant ou adresse e-mail : </label>
+
+            <form 
+            onSubmit={handleSubmit} 
+            className="login-form">
+                <label htmlFor='identifier'>Identifiant ou adresse e-mail : </label>
                 <input
-                    id='login'
-                    onChange={handleChangeUsername}
+                    id='identifier'
+                    onChange={handleChangeIdentifier}
                     type="text"
-                    value={username}
+                    value={identifier}
                 />
 
                 <br />
 
-                <label htmlFor='pass'>Mot de passe :</label>
+                <label htmlFor='password'>Mot de passe :</label>
                 <br />
                 <input
-                    id="pass"
+                    id="password"
                     onChange={handleChangePassword}
                     type="password"
                     value={password}

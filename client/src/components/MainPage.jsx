@@ -34,14 +34,17 @@ function MainPage(){
     return (
         <>
             
-            {/* si la page courante est "signin_page" on affiche login, sinon : signin */}
-            {currentPage === "signin_page" ? (
-       <div className="main-page">
-       {/* Afficher les liens vers la page de connexion et la page d'inscription */}
-       <SignIn login={login}/> {/* Afficher le composant SignIn par défaut */}
+        {/* si la page courante est "signin_page" on affiche login, sinon : signin */}
+        {currentPage === "signin_page" ? (
+            <div className="main-page">
+                
+                {/* Afficher les liens vers la page de connexion et la page d'inscription */}
+                <SignIn login={login}/> 
+
                 {/* Afficher le lien vers la page de connexion */}
                 <Link to="/login">Déjà un compte ? Connectez-vous ici</Link>
-   </div>
+
+            </div>
       ) : (
                 currentPage === "message_page" ?
                 (<div className="message-page">

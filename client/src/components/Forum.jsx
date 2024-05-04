@@ -11,20 +11,21 @@ function Forum({ login, logout, isConnected, currentUser, currentPage, setCurren
 
     return (
         <>
-            <div className="message-page-panel">
+            <div className="message-page">
                 {/* On utilise Link pour créer un lien vers la page de profil */}
                 <Link to="/profile">
                     <button>Page de profil</button>
                 </Link>
-            </div>
+           
 
             <Logout />
-            <div className="message-page-msg">
+            {/* <div className="message-page-msg"> */}
                 <MessageList currentUser={currentUser} />
+                <div className="searchmessage">
+                    <SearchMessages />
+                </div>
             </div>
-            <div className="searchmessage">
-                <SearchMessages />
-            </div>
+            
         </>
     )
 }

@@ -10,7 +10,12 @@ function init(db) {
 
     router.use(express.json());
 
-
+    router.use((req, res, next) => {
+        res.header("Access-Control-Allow-Origin", "*"); // Autoriser l'accès depuis n'importe quelle origine
+        res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"); // Autoriser les méthodes HTTP spécifiées
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+    })
     router.use((req, res, next) => {
         console.log('API: method %s, path %s', req.method, req.path); //pour print la méthode (POST, GET..) et le chemin de l'URL demandé dans la requete
         console.log('Body', req.body); // et ce que contient la req
@@ -56,10 +61,11 @@ function init(db) {
         }
     });
     router.post("/user/login", async (req, res) => {
+
         console.log("fonction Login bien appelée")
         try {
-            const { username, password } = req.body;
-            if (!username || !password) {
+            const { identifier, password } = req.body;
+            if (!identifier || !password) {
                 return res.status(400).json({
                     status: 400,
                     message: "Requête invalide : nom d'utilisateur et mot de passe nécessaires"
@@ -67,9 +73,9 @@ function init(db) {
             }
     
             // Vérifier si l'utilisateur existe déjà
-            const userExists = await users.exists(username);
+            const userExists = await users.exists(identifier);
             if (!userExists) {
-                console.log("Le user n'existe pas dans la bdd");
+                console.log("L'utilisateur n'existe pas dans la bdd");
                 return res.status(404).json({
                     status: 404,
                     message: "Nom d'utilisateur invalide"
