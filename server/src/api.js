@@ -17,7 +17,7 @@ function init(db) {
     });
     console.log('jusquici tout va bien');
 
-    const users = new Users.default(db); //création d'une instance de la classe Users + connexion à la bd
+    const users = new Users(db); //création d'une instance de la classe Users + connexion à la bd
 
     console.log('user check');
 

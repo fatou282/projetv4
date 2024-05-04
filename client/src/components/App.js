@@ -1,10 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+
+
 import MainPage from './MainPage';
 import Login from './Login';
 import Forum from './Forum';
 import ProfilePage from './ProfilePage';
-import { useHistory } from 'react-router-dom'; 
+
 
 
 function App() {
