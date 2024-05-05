@@ -19,6 +19,7 @@ function App() {
         <Route path="/login" component={Login}/>
         <Route path="/forum" component={Forum} />
         <Route path="/profile" component={ProfilePage} />
+        
       </Switch>
     </Router>
   );

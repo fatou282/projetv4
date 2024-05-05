@@ -21,7 +21,7 @@ function MessageList({ currentUser }) {
 
     // Fonction pour ajouter un nouveau message à la liste
     function handleMessageSubmit(newMessage) {
-        setMessages([...messages, newMessage]);
+        setMessages(prevMessages => [...prevMessages, newMessage]);
     }
 
     return (
@@ -43,5 +43,6 @@ function MessageList({ currentUser }) {
         </div>
     );
 }
+
 
 export default MessageList;

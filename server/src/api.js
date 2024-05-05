@@ -146,11 +146,11 @@ function init(db) {
 
     router.post("/message", async (req, res) => {
         
-        const {author, content, date} = req.body ; 
-        if (!author|| !content|| !date) {
+        const message = req.body ; 
+        if (!message) {
             res.status(400).send("Missing fields");
         } else {
-            messages.create(author, content, date)
+            messages.createMessage(message)
                 .then((message_id) => res.status(201).send({ id: message_id }))
                 .catch((err) => res.status(500).send(err));
         }

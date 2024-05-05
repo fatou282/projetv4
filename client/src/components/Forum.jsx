@@ -5,9 +5,8 @@ import '../styles/Forum.css';
 import SearchMessages from "./SearchMessages";
 import { Link } from 'react-router-dom';
 
-function Forum(props, {logout, setCurrentPage}) {
+function Forum(props, {setCurrentPage}) {
     const { currentUser } = props.location.state;
-
     function handleClickProfilePage() {
         setCurrentPage("profile_page");
     }

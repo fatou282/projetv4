@@ -82,7 +82,7 @@ function SignIn({ history }) {
 
                 <button type="submit">S'inscrire</button>
                 <button type="reset">Annuler</button>
-                <Link to="/login" >Vous n'avez pas de compte ? Inscrivez-vous ici</Link>
+                <Link to="/login" >Vous avez déja un compte ? Identifiez vous ici </Link>
 
             </form>
         </div>

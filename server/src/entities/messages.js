@@ -18,18 +18,14 @@ class Messages {
     }
 
     // Fonction pour récupérer tous les messages
-    getAllMessages() {
-        return new Promise((resolve, reject) => {
-            this.db.collection("messages").find({}).toArray((err, messages) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(messages);
-                }
-            });
-        });
+    async getAllMessages() {
+        try {
+            const messages = await this.db.collection('messages').find().toArray();
+            return messages ; // Retourne la liste de tous les utilisateurs
+        } catch (error) {
+            throw new Error("Erreur lors de la récupération de la liste des messages : " + error.message);
+        }
     }
-
     // Fonction pour créer un nouveau message
     createMessage(messageData) {
         return new Promise((resolve, reject) => {

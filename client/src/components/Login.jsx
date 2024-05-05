@@ -17,11 +17,9 @@ function Login({history}) {
                 throw new Error('Identifiant ou mot de passe incorrect');
             }
         
-            // Récupérer les données de l'utilisateur depuis la réponse
-            const userData = response.data.user;
  history.push({
                 pathname: '/forum',
-                state: { currentUser: userData }
+                state: { currentUser}
             });
             // Appeler la fonction de connexion passée en tant que prop depuis MainPage
         } catch (error) {

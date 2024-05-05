@@ -18,7 +18,7 @@ function MessageForm({ onMessageSubmit, currentUser }) {
 
         // Créer l'objet message avec les données du formulaire
         const messageData = {
-            author: currentUser.username ? currentUser.username : 'anonymous_user',
+            author: currentUser.username,
             content: messageContent,
             date: stringifiedDate,
         };
