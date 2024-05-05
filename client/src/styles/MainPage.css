@@ -2,8 +2,23 @@
     display: flex;
     flex-direction: row;
 }
+h1{
+    color: #CBB8A9;
+}
+.choix{
+    align-items: center;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+.options{
+    border : 1px black solid;
+    border-radius: 15px;
+    width : 25%;
+    padding : 25px;
+    background-color: beige;
 
-
+}
 .message-page{
     display: flex;
     gap : 20px;

@@ -4,6 +4,7 @@ import SignIn from "./SignIn";
 import Forum from "./Forum";
 import ProfilePage from "./ProfilePage";
 import AdminPanel from "./AdminPanel";
+import {Link} from "react-router-dom"
 
 function MainPage({ history }) {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -22,13 +23,22 @@ function MainPage({ history }) {
 
   return (
     <>
-      {/* Afficher le composant SignIn ou Forum en fonction de l'état de connexion */}
+      
       {!isConnected ? (
-        <div className="main-page">
-          <SignIn login={login} />
-          
+        <div className="choix">
+          <h1>Bienvenue sur OrganizAsso ! </h1>
+          <h2>Le site qui vous permet d'échanger avec votre asso'</h2>  
+          <div className="options">
+          <p>Pour vous connecter, c'est par ici :</p>
+          <Link to="/login">Se connecter</Link>
+
+          <p>Et pour vous inscrire, c'est par là :</p>
+          <Link to="/signin">S'inscrire </Link>
+          </div>
         </div>
-      ) : (
+      ):(
+
+      
         <div className="main-page">
           {isAdmin && <AdminPanel />}
           <Forum
@@ -37,10 +47,14 @@ function MainPage({ history }) {
             isConnected={isConnected}
             currentUser={currentUser}
           />
-          {/* Afficher le composant ProfilePage si l'utilisateur est connecté */}
-          <ProfilePage />
+          <ProfilePage /> {/* Afficher le composant ProfilePage si l'utilisateur est connecté */}
         </div>
-      )}
+      
+      
+      
+  
+          
+      )} 
     </>
   );
 }

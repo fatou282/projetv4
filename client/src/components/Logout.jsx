@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 function Logout({ logout }) {
     return (
-        <Link to="/signin">
+        <Link to="/mainpage">
             <button
                 onClick={logout}
                 className="logout-button">

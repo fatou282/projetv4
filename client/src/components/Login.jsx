@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Importer Axios
 import '../styles/Login.css';
+import {Link} from "react-router-dom"
 
 function Login({history}) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
+
     axios.defaults.baseURL = 'http://localhost:4000';
+    
     async function handleSubmit(event) {
         event.preventDefault();
         const currentUser = { username, password };
@@ -40,7 +43,8 @@ function Login({history}) {
             <h2>Connexion</h2>
             {error && <div className="error">{error}</div>}
             <form onSubmit={handleSubmit} className="login-form">
-                <label htmlFor='login'>Identifiant :</label>
+                <label htmlFor='login'>Identifiant:</label>
+                <br />
                 <input
                     id='login'
                     onChange={handleChangeUsername}
@@ -60,6 +64,8 @@ function Login({history}) {
                 />
                 <br />
                 <button type="submit">Se connecter</button>
+                <br />
+                <Link to="/signin">Vous n'avez pas de compte ? Inscrivez vous ici</Link>
             </form>
         </div>
     );
