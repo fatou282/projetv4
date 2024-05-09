@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 function SignIn({ history }) {
     const [name, setName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [username, setUsername] = useState("");
+    const [login, setLogin] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -22,8 +22,8 @@ function SignIn({ history }) {
             case "lastName":
                 setLastName(value);
                 break;
-            case "username":
-                setUsername(value);
+            case "login":
+                setLogin(value);
                 break;
             case "email":
                 setEmail(value);
@@ -46,7 +46,7 @@ function SignIn({ history }) {
         }
 
         try {
-            const user = { name, lastName, username, email, password };
+            const user = { name, lastName, login, email, password };
 
             console.log("User Data:", user);
 
@@ -66,10 +66,10 @@ function SignIn({ history }) {
             <form className='signin-form' onSubmit={handleSubmit}>
                 <label>Prénom</label> <label>Nom</label>
                 <input type="text" name="name" value={name} onChange={handleChange} className='input-signin-name'/>
-                <input type="text" name="lastName" value={lastName} onChange={handleChange} className='input-signin-lastName'/>
+                <input type="text" name="lastNam e" value={lastName} onChange={handleChange} className='input-signin-lastName'/>
 
                 <label>Identifiant</label>
-                <input type="text" name="username" value={username} onChange={handleChange} className='input-signin-username'/>
+                <input type="text" name="login" value={login} onChange={handleChange} className='input-signin-username'/>
 
                 <label>E-mail</label>
                 <input type="email" name="email" value={email} onChange={handleChange} className='input-signin-email'/>

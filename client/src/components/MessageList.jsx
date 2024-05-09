@@ -24,6 +24,11 @@ function MessageList({ currentUser }) {
         setMessages(prevMessages => [...prevMessages, newMessage]);
     }
 
+    // Fonction pour supprimer un message de la liste
+    function handleDeleteMessage(messageId) {
+        setMessages(prevMessages => prevMessages.filter(message => message._id !== messageId));
+    }
+
     return (
         <div className='message-list'>
             <h1>Liste des messages</h1>
@@ -33,10 +38,12 @@ function MessageList({ currentUser }) {
                 {/* Afficher la liste des messages */}
                 {messages.map(message => (
                     <Message
-                        key={message.id}
+                        key={message._id}
+                        ident={message._id}
                         author={message.author}
                         content={message.content}
                         date={message.date}
+                        onDeleteMessage={handleDeleteMessage} // Passer la fonction de suppression
                     />
                 ))}
             </ul>
